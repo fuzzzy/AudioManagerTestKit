@@ -1,0 +1,190 @@
+
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".AudioTestActivity" >
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/mode_noraml"
+        android:onClick="onStopClick"
+        android:text="@string/stop" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_stream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btn_stop"
+        android:layout_below="@id/btn_stop"
+        android:layout_marginTop="16dp" >
+
+        <RadioButton
+            android:id="@+id/radio_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/stream_default" />
+
+        <RadioButton
+            android:id="@+id/radio_voicecall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stream_voice" />
+
+        <RadioButton
+            android:id="@+id/radio_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stream_music" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/mode_noraml"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/radioGroup_stream"
+        android:onClick="onNormalClick"
+        android:text="@string/mode_normal" />
+
+    <Button
+        android:id="@+id/mode_incall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mode_noraml"
+        android:layout_alignBottom="@+id/mode_noraml"
+        android:layout_toRightOf="@+id/mode_noraml"
+        android:onClick="onInCallClick"
+        android:text="@string/mode_incall" />
+
+    <Button
+        android:id="@+id/mode_incomm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mode_incall"
+        android:layout_alignBottom="@+id/mode_incall"
+        android:layout_toRightOf="@+id/mode_incall"
+        android:onClick="onInCommClick"
+        android:text="@string/mode_incomm" />
+
+    <Button
+        android:id="@+id/button_earpiece"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mode_noraml"
+        android:layout_below="@+id/mode_noraml"
+        android:layout_marginTop="15dp"
+        android:onClick="onEarpieceClick"
+        android:text="@string/route_earpiece" />
+
+    <CheckBox
+        android:id="@+id/checkBox_16k"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button_earpiece"
+        android:layout_toRightOf="@+id/button_earpiece"
+        android:checked="true"
+        android:text="@string/use_16k" />
+
+    <Button
+        android:id="@+id/button_start_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_speaker"
+        android:layout_below="@+id/button_speaker"
+        android:onClick="onStartBtClick"
+        android:text="@string/route_start_bt" />
+
+    <Button
+        android:id="@+id/button_speaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_earpiece"
+        android:layout_toLeftOf="@+id/checkBox_16k"
+        android:onClick="onSpeakerClick"
+        android:text="@string/route_speaker" />
+
+    <Button
+        android:id="@+id/button_bt_route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_start_bt"
+        android:layout_below="@+id/button_start_bt"
+        android:onClick="onBtScoClick"
+        android:text="@string/route_sco" />
+
+    <Button
+        android:id="@+id/button_stop_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_speaker"
+        android:layout_toRightOf="@+id/button_start_bt"
+        android:onClick="onStopBtClick"
+        android:text="@string/route_stop_bt" />
+
+    <Button
+        android:id="@+id/button_bt_sco_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_start_bt"
+        android:layout_toRightOf="@+id/button_speaker"
+        android:onClick="onBtScoOffClick"
+        android:text="@string/route_sco_off" />
+
+    <Button
+        android:id="@+id/button_speaker_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_earpiece"
+        android:layout_toRightOf="@+id/button_earpiece"
+        android:onClick="onSpeakerOffClick"
+        android:text="@string/route_speaker_off" />
+
+    <TextView
+        android:id="@+id/text_route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn_play"
+        android:layout_toRightOf="@+id/btn_play"
+        android:text="@string/route_earpiece" />
+
+    <TextView
+        android:id="@+id/text_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_route"
+        android:layout_toRightOf="@+id/btn_play"
+        android:text="@string/mode_normal" />
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_stop"
+        android:layout_alignBottom="@+id/btn_stop"
+        android:layout_toRightOf="@+id/btn_stop"
+        android:onClick="onPlayClick"
+        android:text="@string/play" />
+
+    <TextView
+        android:id="@+id/textView_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_play"
+        android:layout_toRightOf="@+id/btn_play" />
+
+</RelativeLayout>
+</ScrollView>
