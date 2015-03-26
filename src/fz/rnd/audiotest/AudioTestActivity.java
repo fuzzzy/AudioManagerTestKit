@@ -1,6 +1,8 @@
 package fz.rnd.audiotest;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +11,8 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.text.method.DateTimeKeyListener;
 import android.view.Menu;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -63,7 +67,11 @@ public class AudioTestActivity extends Activity {
 	
 	private void PostToLog(String s) {
 		StringBuilder sb = new StringBuilder();
-    	sb.append(s).append('\n').append(log.getText());
+		
+		SimpleDateFormat logDateFormat = new SimpleDateFormat("HH:mm:ss ");
+		Date timestamp = new Date();
+		
+    	sb.append(logDateFormat.format(timestamp)).append(s).append('\n').append(log.getText());
     	log.setText(sb.toString());
 	}
 	
