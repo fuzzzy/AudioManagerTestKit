@@ -1,57 +1,70 @@
 package fz.rnd.audiotest;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.text.method.DateTimeKeyListener;
+
 import android.view.Menu;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class AudioTestActivity extends Activity {
+public class AudioTestActivity extends Activity implements AudioManager.OnAudioFocusChangeListener {
 
+	CheckBox checkBox16k;
 	RadioGroup streamGroup;
 	TextView routeText;
 	TextView modeText;
 	TextView stateText;
-	TextView log;
-	
-	//AudioTrack player;
-	SoundPool player;
-	MediaPlayer mp;
+
 	AudioManager manager;
+	IMediaLoad  load;
+	LoadConfig config;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_audio_test);
-		
+
+        config = new LoadConfig();
+
+		checkBox16k = (CheckBox) findViewById(R.id.checkBox_16k);
 		streamGroup = (RadioGroup) findViewById(R.id.radioGroup_stream);
 		routeText = (TextView) findViewById(R.id.text_route);
 		modeText = (TextView) findViewById(R.id.text_mode);
 		stateText = (TextView) findViewById(R.id.textView_state);
-		log = (TextView) findViewById(R.id.textView_log);
-		
-		manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE); 
-		mp = new MediaPlayer();
-		
-		
+
+		manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		streamGroup.setOnCheckedChangeListener(new
+			RadioGroup.OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(RadioGroup radioGroup, int i) {
+					config.playback_audio_stream = getStreamByRadioButton();
+				}
+			});
+
+		checkBox16k.setChecked(false);
+		checkBox16k.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				config.playback_sample_rate = b ? 16000 : 44100;
+				config.record_sample_rate = config.playback_sample_rate;
+			}
+		});
+
+		routeText.setText("wefwef:  " + manager.getStreamVolume(9));
+
+
+		load = new AudioTrackRecordLoad(this, config);//new SoundPoolLoad(this, config);
 		routeText.setText("sco:" + manager.isBluetoothScoOn() + " a2dp:" + manager.isBluetoothA2dpOn() + " sco a:" + manager.isBluetoothScoAvailableOffCall());
 	}
 	
 	@Override 
 	protected void onPause() {
-		stopPlayer();
+		load.stop();
 		super.onPause();
 	};
 
@@ -62,28 +75,18 @@ public class AudioTestActivity extends Activity {
 	}
 	
 	public void onStopClick(View v) {
-		stopPlayer();
-	}
-	
-	private void PostToLog(String s) {
-		StringBuilder sb = new StringBuilder();
-		
-		SimpleDateFormat logDateFormat = new SimpleDateFormat("HH:mm:ss ");
-		Date timestamp = new Date();
-		
-    	sb.append(logDateFormat.format(timestamp)).append(s).append('\n').append(log.getText());
-    	log.setText(sb.toString());
+		load.stop();
 	}
 	
 	private int getStreamByRadioButton() {
 		switch(streamGroup.getCheckedRadioButtonId()) {
 		case R.id.radio_voicecall:
 			return AudioManager.STREAM_VOICE_CALL;
-		case R.id.radio_ring: 
-			return AudioManager.STREAM_RING;
+		case R.id.radio_music: 
+			return AudioManager.STREAM_MUSIC;
 		case R.id.radio_default:
 		default:
-			return AudioManager.STREAM_MUSIC;
+			return AudioManager.USE_DEFAULT_STREAM_TYPE;
 		}
 	}
 	
@@ -94,114 +97,58 @@ public class AudioTestActivity extends Activity {
 		logMessage.append("Speaker: ").append(manager.isSpeakerphoneOn() ? "ON" : "off").append("\n");
 		stateText.setText(logMessage);
 	}
-
-	private void startPlayback() {
-		if(!mp.isPlaying()) {
-	    	PostToLog("play clicked.");
-	    	preparePlayer();
-	    	mp.start();
-    	}
-	}
-	
-	private void stopPlayer() {
-		if(mp.isPlaying()) {
-    		PostToLog("stopping.");
-    		mp.stop();
-    		mp.reset();
-    	}
-	}
-	
-	private void preparePlayer() {
-    	try {
-    		Uri res = Uri.parse("android.resource://" + getApplicationContext().getResources().getResourceName(R.raw.audio_long16).replace(":", "/"));
-			mp.setDataSource(this, res);
-			mp.setAudioStreamType(getStreamByRadioButton());
-			mp.setLooping(true);
-			PostToLog(res.toString());
-		} catch (IllegalArgumentException e) {
-			PostToLog("player prepare fail. 1");
-			return;
-		} catch (SecurityException e) {
-			PostToLog("player prepare fail. 2");
-			return;
-		} catch (IllegalStateException e) {
-			PostToLog("player prepare fail. 3");
-			return;
-		} catch (IOException e) {
-			PostToLog("player prepare fail. 4");
-			return;
-		}
-    	
-    	try {
-			mp.prepare();
-		} catch (IllegalStateException e) {
-			PostToLog("player prepare fail. 5");
-			return;
-		} catch (IOException e) {
-			PostToLog("player prepare fail. 6");
-			return;
-		}
-    }
 	 
 	public void onPlayClick(View v) {	
 		routeText.setText("sco:" + manager.isBluetoothScoOn() + " a2dp:" + manager.isBluetoothA2dpOn() + " sco available:" + manager.isBluetoothScoAvailableOffCall());
-		startPlayback();
+		load.start();
 	}
 	
 	public void onNormalClick(View v) {
 		manager.setMode(AudioManager.MODE_NORMAL);
 		modeText.setText(R.string.mode_normal);
 		updateAudioState();
-		PostToLog("Setting mode to NORMAL");
 	}
 	
 	public void onInCallClick(View v) {	
 		manager.setMode(AudioManager.MODE_IN_CALL);
 		modeText.setText(R.string.mode_incall);
 		updateAudioState();
-		PostToLog("Setting mode to IN_CALL");
 	}
 	
 	public void onInCommClick(View v) {		
 		manager.setMode(AudioManager.MODE_IN_COMMUNICATION);
 		modeText.setText(R.string.mode_incomm);
 		updateAudioState();
-		PostToLog("Setting mode to IN_COMMUNICATION");
 	}
 	
 	public void onSpeakerClick(View v) {
-		manager.setBluetoothScoOn(false);
+		//manager.setBluetoothScoOn(false);
 		manager.setSpeakerphoneOn(true);
 		updateAudioState();
 	}
 	
 	public void onSpeakerOffClick(View v) {
 		manager.setSpeakerphoneOn(false);
-		manager.setBluetoothScoOn(true);
+		//manager.setBluetoothScoOn(true);
 		updateAudioState();
 	}
 	
 	public void onStartBtClick(View v) {
 		manager.startBluetoothSco();
 		updateAudioState();
-		PostToLog("starting sco");
 	}
 	public void onStopBtClick(View v) {
 		manager.stopBluetoothSco();
 		updateAudioState();
-		PostToLog("stopping sco");
 	}
 	
 	public void onBtScoClick(View v) {
 		manager.setBluetoothScoOn(true);
 		updateAudioState();
-		PostToLog("enabling sco ");
 	}
-	
 	public void onBtScoOffClick(View v) {
 		manager.setBluetoothScoOn(false);
 		updateAudioState();
-		PostToLog("disabling sco ");
 	}
 	
 	public void onEarpieceClick(View v) {	
@@ -209,9 +156,22 @@ public class AudioTestActivity extends Activity {
 			manager.setBluetoothScoOn(false);
 		}
 		
-		if( manager.isSpeakerphoneOn()) {
+		if(manager.isSpeakerphoneOn()) {
 			manager.setSpeakerphoneOn(false);
 		}
 		updateAudioState();
 	}
+
+    public void onAudioFocusGainClick(View v) {
+	    manager.requestAudioFocus(this, config.playback_audio_stream,  AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+    }
+
+    public void onAudioFocusLoseClick(View v) {
+        manager.abandonAudioFocus(this);
+    }
+
+    @Override
+    public void onAudioFocusChange(int i) {
+
+    }
 }

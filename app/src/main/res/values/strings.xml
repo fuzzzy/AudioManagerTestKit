@@ -8,8 +8,8 @@
 	<string name="mode_normal">Normall</string>
 	<string name="mode_incomm">In comm</string>
 	
-	<string name="play">►</string>
-    <string name="stop">◼</string>
+	<string name="play">Play</string>
+	<string name="stop">Stop</string>
 	
 	<string name="route_earpiece">Earpiece</string>
 	<string name="route_speaker">Speaker</string>
@@ -18,11 +18,12 @@
 	<string name="route_speaker_off">Speaker off</string>
 	<string name="route_stop_bt">Stop BT</string>
 	<string name="route_sco_off">BT SCO off</string>
+    <string name="audio_focus_lose">AudioFocus lose</string>
+    <string name="audio_focus_gain">AudioFocus gain</string>
 	
-	<string name="stream_default">Defaut (Music)</string>
-	<string name="stream_notification">Notification</string>
+	<string name="stream_default">Defaut</string>
+	<string name="stream_music">Music</string>
 	<string name="stream_voice">Voice call</string>
-	<string name="stream_ring">Ring</string>
 	
 	<string name="use_16k">Use 16k</string>
 	
