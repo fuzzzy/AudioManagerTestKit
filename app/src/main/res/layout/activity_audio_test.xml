@@ -18,8 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/mode_noraml"
+        android:layout_toRightOf="@+id/mode_normal"
         android:onClick="onStopClick"
         android:text="@string/stop" />
 
@@ -28,8 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/btn_stop"
-        android:layout_below="@id/btn_stop"
-        android:layout_marginTop="16dp" >
+        android:layout_below="@id/btn_stop">
 
         <RadioButton
             android:id="@+id/radio_default"
@@ -49,14 +47,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stream_music" />
+
+        <RadioButton
+            android:id="@+id/radio_ring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stream_ring" />
     </RadioGroup>
 
+
+    <TextView
+        android:id="@+id/mode_title_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_audiomanager_mode"
+        android:layout_below="@+id/radioGroup_stream"/>
+
     <Button
-        android:id="@+id/mode_noraml"
+        android:id="@+id/mode_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/radioGroup_stream"
+        android:layout_below="@id/mode_title_header"
         android:onClick="onNormalClick"
         android:text="@string/mode_normal" />
 
@@ -64,9 +76,9 @@
         android:id="@+id/mode_incall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mode_noraml"
-        android:layout_alignBottom="@+id/mode_noraml"
-        android:layout_toRightOf="@+id/mode_noraml"
+        android:layout_alignBaseline="@+id/mode_normal"
+        android:layout_alignBottom="@+id/mode_normal"
+        android:layout_toRightOf="@+id/mode_normal"
         android:onClick="onInCallClick"
         android:text="@string/mode_incall" />
 
@@ -74,19 +86,36 @@
         android:id="@+id/mode_incomm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mode_incall"
-        android:layout_alignBottom="@+id/mode_incall"
+        android:layout_alignBaseline="@+id/mode_normal"
+        android:layout_alignBottom="@+id/mode_normal"
         android:layout_toRightOf="@+id/mode_incall"
         android:onClick="onInCommClick"
         android:text="@string/mode_incomm" />
 
     <Button
+        android:id="@+id/mode_ring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mode_normal"
+        android:layout_alignBottom="@+id/mode_normal"
+        android:layout_toRightOf="@+id/mode_incomm"
+        android:onClick="onModeRingClick"
+        android:text="@string/mode_ring" />
+
+    <TextView
+        android:id="@+id/route_title_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_audiomanager_route"
+        android:layout_below="@+id/mode_normal"/>
+
+    <Button
         android:id="@+id/button_earpiece"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/mode_noraml"
-        android:layout_below="@+id/mode_noraml"
-        android:layout_marginTop="15dp"
+        android:layout_alignLeft="@id/mode_normal"
+        android:layout_below="@id/route_title_header"
+
         android:onClick="onEarpieceClick"
         android:text="@string/route_earpiece" />
 
@@ -103,7 +132,7 @@
         android:id="@+id/button_start_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_speaker"
+        android:layout_alignLeft="@+id/mode_normal"
         android:layout_below="@+id/button_speaker"
         android:onClick="onStartBtClick"
         android:text="@string/route_start_bt" />
@@ -113,7 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_earpiece"
-        android:layout_toLeftOf="@+id/checkBox_16k"
+        android:layout_alignLeft="@+id/mode_normal"
         android:onClick="onSpeakerClick"
         android:text="@string/route_speaker" />
 
@@ -121,7 +150,7 @@
         android:id="@+id/button_bt_route"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_start_bt"
+        android:layout_alignLeft="@+id/mode_normal"
         android:layout_below="@+id/button_start_bt"
         android:onClick="onBtScoClick"
         android:text="@string/route_sco" />
@@ -130,7 +159,7 @@
         android:id="@+id/button_focus_gain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_bt_route"
+        android:layout_alignLeft="@+id/mode_normal"
         android:layout_below="@+id/button_bt_route"
         android:onClick="onAudioFocusGainClick"
         android:text="@string/audio_focus_gain" />

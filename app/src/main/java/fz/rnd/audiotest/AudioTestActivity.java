@@ -84,7 +84,9 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
 			return AudioManager.STREAM_VOICE_CALL;
 		case R.id.radio_music: 
 			return AudioManager.STREAM_MUSIC;
-		case R.id.radio_default:
+        case R.id.radio_ring:
+            return AudioManager.STREAM_RING;
+        case R.id.radio_default:
 		default:
 			return AudioManager.USE_DEFAULT_STREAM_TYPE;
 		}
@@ -120,6 +122,12 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
 		modeText.setText(R.string.mode_incomm);
 		updateAudioState();
 	}
+
+    public void onModeRingClick(View v) {
+        manager.setMode(AudioManager.MODE_RINGTONE);
+        modeText.setText(R.string.mode_ring);
+        updateAudioState();
+    }
 	
 	public void onSpeakerClick(View v) {
 		//manager.setBluetoothScoOn(false);
