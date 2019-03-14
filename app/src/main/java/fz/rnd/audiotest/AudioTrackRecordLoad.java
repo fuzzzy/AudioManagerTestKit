@@ -7,36 +7,25 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.util.Log;
 
 /**
  * Created by fz on 16.02.16.
  */
 public class AudioTrackRecordLoad extends IMediaLoad {
 
-    final Object playerLock = new Object();
-    AudioTrack player;
+    private final Object mPlayerLock = new Object();
+    private AudioTrack mPlayer;
 
-    short[] playbackBuffer;
-    int playbackDataLen = 0;
-    double t = 0;
-    double dt = 1;
-    int playBufferSize = 0;
-    Thread playbackThread;
+    private short[] mPlaybackBuffer;
+    private int mPlaybackDataLen = 0;
+    private double mT = 0;
+    private double mDt = 1;
+    private int mPlayBufferSize = 0;
 
-    short[] recordBuffer;
-    int recBufferSize = 0;
-    AudioRecord recorder;
-    Thread recorderThread;
-    int delayInSamples = 0;
-
-
-    final double TONE_FREQUENCY = 440;
-    final double INITIAL_PHASE = 0;
-    final double GAIN = 0.3;
-
-    final double DELAY = 0.01; //in seconds
-    final double FEEDBACK = 0.7;
+    private short[] mRecordBuffer;
+    private int mRecBufferSize = 0;
+    private AudioRecord mRecorder;
+    private int mDelayInSamples = 0;
 
     AudioTrackRecordLoad(Context c, LoadConfig configuration) {
         super(c, configuration);
@@ -52,34 +41,34 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     }
 
     private void startPayback() {
-        synchronized (playerLock) {
+        synchronized (mPlayerLock) {
             if( android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP ) {
-                player = createTrackPost21Api();
+                mPlayer = createTrackPost21Api();
             }
             else {
-                player = createTrackPre21Api();
+                mPlayer = createTrackPre21Api();
             }
 
-            playbackThread = new Thread(new Runnable() {
+            Thread playbackThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     boolean _continue = true;
 
-                    while(_continue) {
-                        synchronized (playerLock) {
-                           // Log.d("load");
-                            if (player == null) {
+                    while (_continue) {
+                        synchronized (mPlayerLock) {
+                            // Log.d("load");
+                            if (mPlayer == null) {
                                 break;
                             }
                             processPlayBuffer();
-                            player.write(playbackBuffer, 0, playbackDataLen);
-                            _continue = player.getPlayState() != AudioTrack.PLAYSTATE_STOPPED;
+                            mPlayer.write(mPlaybackBuffer, 0, mPlaybackDataLen);
+                            _continue = mPlayer.getPlayState() != AudioTrack.PLAYSTATE_STOPPED;
                         }
                     }
                 }
             });
 
-            player.play();
+            mPlayer.play();
             playbackThread.start();
         }
     }
@@ -89,7 +78,7 @@ public class AudioTrackRecordLoad extends IMediaLoad {
                             _cfg.playback_sample_rate,
                             _cfg.playback_format,
                             AudioFormat.ENCODING_PCM_16BIT,
-                            playBufferSize,
+                 mPlayBufferSize,
                             AudioTrack.MODE_STREAM);
     }
 
@@ -130,58 +119,64 @@ public class AudioTrackRecordLoad extends IMediaLoad {
                             .setChannelMask(_cfg.playback_format)
                             .build();
 
-        return new AudioTrack(at, af, playBufferSize, AudioTrack.MODE_STREAM, AudioManager.AUDIO_SESSION_ID_GENERATE);
+        return new AudioTrack(at, af, mPlayBufferSize, AudioTrack.MODE_STREAM, AudioManager.AUDIO_SESSION_ID_GENERATE);
     }
 
     private void processPlayBuffer() {
-        for(int i = 0; i < playbackBuffer.length; i++) {
-            playbackBuffer[i] = (short) Math.round(Short.MAX_VALUE * (GAIN * Math.sin(INITIAL_PHASE + 2*Math.PI*TONE_FREQUENCY*(t))));
-            if(i >= delayInSamples && i < recordBuffer.length - delayInSamples) {
-                playbackBuffer[i] += FEEDBACK * recordBuffer[i - delayInSamples];
+        for(int i = 0; i < mPlaybackBuffer.length; i++) {
+            double TONE_FREQUENCY = 440;
+            double INITIAL_PHASE = 0;
+            double GAIN = 0.3;
+
+            mPlaybackBuffer[i] = (short) Math.round(Short.MAX_VALUE * (GAIN * Math.sin(INITIAL_PHASE + 2*Math.PI*
+                    TONE_FREQUENCY *(mT))));
+            if(i >= mDelayInSamples && i < mRecordBuffer.length - mDelayInSamples) {
+                double FEEDBACK = 0.7;
+                mPlaybackBuffer[i] += FEEDBACK * mRecordBuffer[i - mDelayInSamples];
             }
-            t += dt;
+            mT += mDt;
         }
 
-        if(t > 2*Math.PI  ) {
-            t -= 2*Math.PI;
+        if(mT > 2*Math.PI  ) {
+            mT -= 2*Math.PI;
         }
 
-        playbackDataLen = playbackBuffer.length;
+        mPlaybackDataLen = mPlaybackBuffer.length;
     }
 
     private void startRecord() {
-        recorder = new AudioRecord(_cfg.record_audio_source,
+        mRecorder = new AudioRecord(_cfg.record_audio_source,
                                     _cfg.record_sample_rate,
                                     AudioFormat.CHANNEL_IN_MONO,
                                     AudioFormat.ENCODING_PCM_16BIT,
-                                    recBufferSize);
+                mRecBufferSize);
 
-        recorderThread = new Thread(new Runnable() {
+        Thread recorderThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
-                    synchronized (recordBuffer) {
-                        recorder.read(recordBuffer, 0, recBufferSize);
-                    }
+                while (mRecorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                    mRecorder.read(mRecordBuffer, 0, mRecBufferSize);
                 }
             }
         });
 
-        recorder.startRecording();
+        mRecorder.startRecording();
         recorderThread.start();
     }
 
     private void initBuffers() {
-        playBufferSize = AudioTrack.getMinBufferSize(_cfg.playback_sample_rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        mPlayBufferSize = AudioTrack.getMinBufferSize(_cfg.playback_sample_rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-        dt = 1.0 / _cfg.playback_sample_rate;
-        playbackBuffer = new short[playBufferSize];
-        t = 0;
+        mDt = 1.0 / _cfg.playback_sample_rate;
+        mPlaybackBuffer = new short[mPlayBufferSize];
+        mT = 0;
 
-        delayInSamples = (int)Math.round(_cfg.record_sample_rate * DELAY);
-        recBufferSize = AudioRecord.getMinBufferSize(_cfg.record_sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        //in seconds
+        double DELAY = 0.01;
+        mDelayInSamples = (int)Math.round(_cfg.record_sample_rate * DELAY);
+        mRecBufferSize = AudioRecord.getMinBufferSize(_cfg.record_sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-        recordBuffer = new short[recBufferSize];
+        mRecordBuffer = new short[mRecBufferSize];
     }
 
     @Override
@@ -193,18 +188,18 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     }
 
     private void stopPlayback() {
-        synchronized (playerLock) {
-            if (player != null) {
-                player.stop();
-                player = null;
+        synchronized (mPlayerLock) {
+            if (mPlayer != null) {
+                mPlayer.stop();
+                mPlayer = null;
             }
         }
     }
 
     private void stopRecord() {
-        if (recorder != null) {
-            recorder.stop();
-            recorder = null;
+        if (mRecorder != null) {
+            mRecorder.stop();
+            mRecorder = null;
         }
     }
 
