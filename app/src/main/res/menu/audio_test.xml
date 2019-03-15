@@ -17,4 +17,9 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_mediaplayer"/>
+    <item
+        android:id="@+id/action_combined"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_combined"/>
 </menu>

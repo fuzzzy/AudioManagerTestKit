@@ -10,9 +10,6 @@ import android.util.Log;
 
 import java.io.IOException;
 
-/**
- * Created by fz on 15.02.16.
- */
 class MediaPlayerLoad extends IMediaLoad
         implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener{
 

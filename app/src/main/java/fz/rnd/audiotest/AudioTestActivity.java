@@ -14,18 +14,19 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class AudioTestActivity extends Activity implements AudioManager.OnAudioFocusChangeListener {
+    private CheckBox mCheckBox16K;
+    private CheckBox mCheckBoxRec;
+    private RadioGroup mStreamGroup;
+    private TextView mRouteText;
+    private TextView mModeText;
+    private TextView mStateText;
 
-	CheckBox mCheckBox16K;
-	RadioGroup mStreamGroup;
-	TextView mRouteText;
-	TextView mModeText;
-	TextView mStateText;
+    private AudioManager mManager;
+    private IMediaLoad mLoad;
+    private LoadConfig mConfig;
 
-	AudioManager mManager;
-	IMediaLoad mLoad;
-	LoadConfig mConfig;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_audio_test);
@@ -33,6 +34,7 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
         mConfig = new LoadConfig();
 
 		mCheckBox16K = (CheckBox) findViewById(R.id.checkBox_16k);
+        mCheckBoxRec = (CheckBox) findViewById(R.id.checkBox_rec);
 		mStreamGroup = (RadioGroup) findViewById(R.id.radioGroup_stream);
 		mRouteText = (TextView) findViewById(R.id.text_route);
 		mModeText = (TextView) findViewById(R.id.text_mode);
@@ -55,6 +57,14 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
 				mConfig.record_sample_rate = mConfig.playback_sample_rate;
 			}
 		});
+
+        mCheckBoxRec.setChecked(false);
+        mCheckBoxRec.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mConfig.use_recording = b;
+            }
+        });
 
 		mRouteText.setText("wefwef:  " + mManager.getStreamVolume(9));
 
@@ -90,6 +100,12 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
                     mLoad.stop();
                 }
                 mLoad = new SoundPoolLoad(this, mConfig);
+                break;
+            case R.id.action_combined:
+                if (mLoad != null) {
+                    mLoad.stop();
+                }
+                mLoad = new ComboLoad(this, mConfig);
                 break;
             case R.id.action_trackrecord:
             default:
@@ -187,7 +203,7 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
 		updateAudioState();
 	}
 	
-	public void onEarpieceClick(View v) {	
+	public void onAllOffClick(View v) {
 		if(mManager.isBluetoothScoOn()) {
 			mManager.setBluetoothScoOn(false);
 		}

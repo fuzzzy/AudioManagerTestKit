@@ -5,6 +5,7 @@
     <string name="action_soundpool">Use SoundPool load</string>
     <string name="action_trackrecord">Use AudioTrack load</string>
     <string name="action_mediaplayer">Use MediaPlayer load</string>
+    <string name="action_combined">Use combined load</string>
 
 	<string name="mode_incall">In call</string>
 	<string name="mode_normal">Normal</string>
@@ -14,7 +15,7 @@
 	<string name="play">Play</string>
 	<string name="stop">Stop</string>
 	
-	<string name="route_earpiece">Earpiece</string>
+	<string name="route_off">All off</string>
 	<string name="route_speaker">Speaker</string>
 	<string name="route_start_bt">Start BT</string>
 	<string name="route_sco">BT SCO</string>
@@ -30,6 +31,7 @@
     <string name="stream_ring">Ringtone</string>
 	
 	<string name="use_16k">Use 16k</string>
+    <string name="use_rec">record</string>
     <string name="title_audiomanager_route">AudioManager route:</string>
     <string name="title_audiomanager_mode">AudioManager mode:</string>
 

@@ -116,8 +116,8 @@
         android:layout_alignLeft="@id/mode_normal"
         android:layout_below="@id/route_title_header"
 
-        android:onClick="onEarpieceClick"
-        android:text="@string/route_earpiece" />
+        android:onClick="onAllOffClick"
+        android:text="@string/route_off"/>
 
     <CheckBox
         android:id="@+id/checkBox_16k"
@@ -127,6 +127,15 @@
         android:layout_toRightOf="@+id/button_earpiece"
         android:checked="true"
         android:text="@string/use_16k" />
+
+    <CheckBox
+        android:id="@+id/checkBox_rec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button_earpiece"
+        android:layout_toRightOf="@+id/checkBox_16k"
+        android:checked="true"
+        android:text="@string/use_rec" />
 
     <Button
         android:id="@+id/button_start_bt"
@@ -206,7 +215,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/btn_play"
         android:layout_toRightOf="@+id/btn_play"
-        android:text="@string/route_earpiece" />
+        android:text="@string/route_off" />
 
     <TextView
         android:id="@+id/text_mode"
