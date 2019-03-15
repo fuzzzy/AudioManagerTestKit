@@ -56,7 +56,7 @@ public class AudioTrackRecordLoad extends IMediaLoad {
 
                     while (_continue) {
                         synchronized (mPlayerLock) {
-                            // Log.d("load");
+                            // Log.d("mLoad");
                             if (mPlayer == null) {
                                 break;
                             }

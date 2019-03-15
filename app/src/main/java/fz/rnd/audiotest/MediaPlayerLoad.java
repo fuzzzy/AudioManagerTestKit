@@ -59,7 +59,7 @@ class MediaPlayerLoad extends IMediaLoad
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         if (mStopped) {
-            //already cleaned player
+            //already cleaned mPlayer
             return;
         }
         if (mPlayer != null) {
