@@ -35,7 +35,7 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     void start() {
         initBuffers();
         startPayback();
-        if (_cfg.use_recording) {
+        if (mConfig.use_recording) {
             startRecord();
         }
     }
@@ -74,9 +74,9 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     }
 
     private AudioTrack createTrackPre21Api() {
-         return new AudioTrack(_cfg.playback_audio_stream,
-                            _cfg.playback_sample_rate,
-                            _cfg.playback_format,
+         return new AudioTrack(mConfig.playback_audio_stream,
+                            mConfig.playback_sample_rate,
+                            mConfig.playback_format,
                             AudioFormat.ENCODING_PCM_16BIT,
                  mPlayBufferSize,
                             AudioTrack.MODE_STREAM);
@@ -110,13 +110,13 @@ public class AudioTrackRecordLoad extends IMediaLoad {
         AudioAttributes.Builder aab = new AudioAttributes.Builder();
                                 //.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                                 //.setUsage(AudioAttributes.USAGE_MEDIA)
-                                aab.setLegacyStreamType(_cfg.playback_audio_stream);
+                                aab.setLegacyStreamType(mConfig.playback_audio_stream);
         AudioAttributes at = aab.build();
 
         AudioFormat af = new AudioFormat.Builder()
                             .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                            .setSampleRate(_cfg.playback_sample_rate)
-                            .setChannelMask(_cfg.playback_format)
+                            .setSampleRate(mConfig.playback_sample_rate)
+                            .setChannelMask(mConfig.playback_format)
                             .build();
 
         return new AudioTrack(at, af, mPlayBufferSize, AudioTrack.MODE_STREAM, AudioManager.AUDIO_SESSION_ID_GENERATE);
@@ -145,8 +145,8 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     }
 
     private void startRecord() {
-        mRecorder = new AudioRecord(_cfg.record_audio_source,
-                                    _cfg.record_sample_rate,
+        mRecorder = new AudioRecord(mConfig.record_audio_source,
+                                    mConfig.record_sample_rate,
                                     AudioFormat.CHANNEL_IN_MONO,
                                     AudioFormat.ENCODING_PCM_16BIT,
                 mRecBufferSize);
@@ -165,16 +165,16 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     }
 
     private void initBuffers() {
-        mPlayBufferSize = AudioTrack.getMinBufferSize(_cfg.playback_sample_rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        mPlayBufferSize = AudioTrack.getMinBufferSize(mConfig.playback_sample_rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-        mDt = 1.0 / _cfg.playback_sample_rate;
+        mDt = 1.0 / mConfig.playback_sample_rate;
         mPlaybackBuffer = new short[mPlayBufferSize];
         mT = 0;
 
         //in seconds
         double DELAY = 0.01;
-        mDelayInSamples = (int)Math.round(_cfg.record_sample_rate * DELAY);
-        mRecBufferSize = AudioRecord.getMinBufferSize(_cfg.record_sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        mDelayInSamples = (int)Math.round(mConfig.record_sample_rate * DELAY);
+        mRecBufferSize = AudioRecord.getMinBufferSize(mConfig.record_sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
         mRecordBuffer = new short[mRecBufferSize];
     }
@@ -182,7 +182,7 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     @Override
     void stop() {
         stopPlayback();
-        if (_cfg.use_recording){
+        if (mConfig.use_recording){
             stopRecord();
         }
     }

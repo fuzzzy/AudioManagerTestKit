@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -58,7 +59,7 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
 		routeText.setText("wefwef:  " + manager.getStreamVolume(9));
 
 
-		load = new AudioTrackRecordLoad(this, config);//new SoundPoolLoad(this, config);
+		load = new AudioTrackRecordLoad(this, config);
 		routeText.setText("sco:" + manager.isBluetoothScoOn() + " a2dp:" + manager.isBluetoothA2dpOn() + " sco a:" + manager.isBluetoothScoAvailableOffCall());
 	}
 	
@@ -73,8 +74,33 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
 		getMenuInflater().inflate(R.menu.audio_test, menu);
 		return true;
 	}
-	
-	public void onStopClick(View v) {
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_mediaplayer:
+                if (load != null) {
+                    load.stop();
+                }
+                load = new MediaPlayerLoad(this, config);
+                break;
+            case R.id.action_soundpool:
+                if (load != null) {
+                    load.stop();
+                }
+                load = new SoundPoolLoad(this, config);
+                break;
+            case R.id.action_trackrecord:
+            default:
+                if (load != null) {
+                    load.stop();
+                }
+                load = new AudioTrackRecordLoad(this, config);
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
+
+    public void onStopClick(View v) {
 		load.stop();
 	}
 	

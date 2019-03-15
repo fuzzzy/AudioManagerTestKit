@@ -10,7 +10,7 @@ import android.media.MediaRecorder;
  * Created by fz on 15.02.16.
  */
 
-public class LoadConfig {
+class LoadConfig {
     int playback_audio_stream = AudioManager.STREAM_MUSIC; //AudioManager.STREAM_MUSIC,
     int playback_sample_rate = 44100;//        44100,
     int playback_format = AudioFormat.CHANNEL_OUT_MONO;// AudioFormat.CHANNEL_OUT_MONO

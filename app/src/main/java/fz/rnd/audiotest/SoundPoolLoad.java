@@ -21,11 +21,11 @@ public class SoundPoolLoad extends IMediaLoad{
     public synchronized void start() {
         stop();
 
-        Log.d("AudioTestKit", "starting SoundPool on stream " + _cfg.playback_audio_stream);
+        Log.d("AudioTestKit", "starting SoundPool on stream " + mConfig.playback_audio_stream);
 
-        player = new SoundPool(1, _cfg.playback_audio_stream, 0);
-        //soundId = player.load(this, R.raw.pop_test_l, 1);
-        soundId = player.load(_ctx, R.raw.test_short, 1);
+        player = new SoundPool(1, mConfig.playback_audio_stream, 0);
+        //soundId = mPlayer.load(this, R.raw.pop_test_l, 1);
+        soundId = player.load(mContext, R.raw.test_short, 1);
         player.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {

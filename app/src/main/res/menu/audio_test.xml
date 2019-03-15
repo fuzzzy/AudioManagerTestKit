@@ -1,9 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_trackrecord"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/action_trackrecord"/>
 
+    <item
+        android:id="@+id/action_soundpool"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_soundpool"/>
+
+    <item
+        android:id="@+id/action_mediaplayer"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_mediaplayer"/>
 </menu>

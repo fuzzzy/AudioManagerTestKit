@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">AudioTest</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_soundpool">Use SoundPool load</string>
+    <string name="action_trackrecord">Use AudioTrack load</string>
+    <string name="action_mediaplayer">Use MediaPlayer load</string>
 
 	<string name="mode_incall">In call</string>
 	<string name="mode_normal">Normal</string>
