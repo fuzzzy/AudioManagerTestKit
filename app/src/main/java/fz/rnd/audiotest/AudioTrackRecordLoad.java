@@ -145,11 +145,16 @@ public class AudioTrackRecordLoad extends IMediaLoad {
     }
 
     private void startRecord() {
-        mRecorder = new AudioRecord(mConfig.record_audio_source,
-                                    mConfig.record_sample_rate,
-                                    AudioFormat.CHANNEL_IN_MONO,
-                                    AudioFormat.ENCODING_PCM_16BIT,
-                mRecBufferSize);
+//        new AudioRecord.Builder().setAudioSource(mConfig.record_audio_source)
+//                                .setAudioFormat(new AudioFormat.Builder()
+//                                            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+//                                            .setSampleRate(mConfig.record_sample_rate).build()).build();
+
+        mRecorder = new AudioRecord (mConfig.record_audio_source,
+                                     mConfig.record_sample_rate,
+                                     AudioFormat.CHANNEL_IN_MONO,
+                                     AudioFormat.ENCODING_PCM_16BIT,
+                                     mRecBufferSize);
 
         Thread recorderThread = new Thread(new Runnable() {
             @Override

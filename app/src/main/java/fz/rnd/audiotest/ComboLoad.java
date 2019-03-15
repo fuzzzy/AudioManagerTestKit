@@ -15,6 +15,8 @@ class ComboLoad extends IMediaLoad {
 
     @Override
     public synchronized void start() {
+        stop();
+
         LoadConfig trackRecordConfig = new LoadConfig();
         trackRecordConfig.playback_audio_stream = AudioManager.STREAM_VOICE_CALL;
         trackRecordConfig.record_audio_source = MediaRecorder.AudioSource.VOICE_COMMUNICATION;
@@ -29,7 +31,11 @@ class ComboLoad extends IMediaLoad {
 
     @Override
     public synchronized void stop() {
-        mMediaPlayerLoad.start();
-        mTrackRecordLoad.stop();
+        if (mMediaPlayerLoad != null) {
+            mMediaPlayerLoad.stop();
+        }
+        if (mTrackRecordLoad != null) {
+            mTrackRecordLoad.stop();
+        }
     }
 }
