@@ -52,17 +52,16 @@ public class AudioTrackRecordLoad extends IMediaLoad {
             Thread playbackThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    boolean _continue = true;
+                    boolean playing = true;
 
-                    while (_continue) {
+                    while (playing) {
                         synchronized (mPlayerLock) {
-                            // Log.d("mLoad");
                             if (mPlayer == null) {
                                 break;
                             }
                             processPlayBuffer();
                             mPlayer.write(mPlaybackBuffer, 0, mPlaybackDataLen);
-                            _continue = mPlayer.getPlayState() != AudioTrack.PLAYSTATE_STOPPED;
+                            playing = mPlayer.getPlayState() != AudioTrack.PLAYSTATE_STOPPED;
                         }
                     }
                 }
@@ -78,7 +77,7 @@ public class AudioTrackRecordLoad extends IMediaLoad {
                             mConfig.playback_sample_rate,
                             mConfig.playback_format,
                             AudioFormat.ENCODING_PCM_16BIT,
-                 mPlayBufferSize,
+                            mPlayBufferSize,
                             AudioTrack.MODE_STREAM);
     }
 
