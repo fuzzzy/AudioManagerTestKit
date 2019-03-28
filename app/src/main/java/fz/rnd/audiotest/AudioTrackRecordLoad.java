@@ -68,6 +68,7 @@ public class AudioTrackRecordLoad extends IMediaLoad {
             });
 
             mPlayer.play();
+
             playbackThread.start();
         }
     }
@@ -188,6 +189,13 @@ public class AudioTrackRecordLoad extends IMediaLoad {
         stopPlayback();
         if (mConfig.use_recording){
             stopRecord();
+        }
+    }
+
+    @Override
+    void pause() {
+        if (mPlayer != null) {
+            mPlayer.pause();
         }
     }
 

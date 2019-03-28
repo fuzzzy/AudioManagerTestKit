@@ -17,4 +17,6 @@ abstract class IMediaLoad {
     abstract void start();
 
     abstract void stop();
+
+    abstract void pause();
 }

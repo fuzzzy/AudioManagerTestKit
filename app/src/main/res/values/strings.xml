@@ -12,8 +12,9 @@
 	<string name="mode_incomm">In comm</string>
     <string name="mode_ring">Ring</string>
 	
-	<string name="play">Play</string>
-	<string name="stop">Stop</string>
+	<string name="play">▶</string>
+    <string name="pause">⏸</string>
+	<string name="stop">⏹️</string>
 	
 	<string name="route_off">All off</string>
 	<string name="route_speaker">Speaker</string>

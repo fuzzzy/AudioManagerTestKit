@@ -43,4 +43,11 @@ public class SoundPoolLoad extends IMediaLoad{
             mPlayer = null;
         }
     }
+
+    @Override
+    void pause() {
+        if(mPlayer != null && mStreamId != -1) {
+            mPlayer.pause(mStreamId);
+        }
+    }
 }

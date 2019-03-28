@@ -22,6 +22,24 @@
         android:onClick="onStopClick"
         android:text="@string/stop" />
 
+    <Button
+        android:id="@+id/btn_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_stop"
+        android:layout_toRightOf="@+id/btn_stop"
+        android:onClick="onPauseClick"
+        android:text="@string/pause" />
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_stop"
+        android:layout_toRightOf="@+id/btn_pause"
+        android:onClick="onPlayClick"
+        android:text="@string/play" />
+
     <RadioGroup
         android:id="@+id/radioGroup_stream"
         android:layout_width="wrap_content"
@@ -225,15 +243,7 @@
         android:layout_toRightOf="@+id/btn_play"
         android:text="@string/mode_normal" />
 
-    <Button
-        android:id="@+id/btn_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btn_stop"
-        android:layout_alignBottom="@+id/btn_stop"
-        android:layout_toRightOf="@+id/btn_stop"
-        android:onClick="onPlayClick"
-        android:text="@string/play" />
+
 
     <TextView
         android:id="@+id/textView_state"

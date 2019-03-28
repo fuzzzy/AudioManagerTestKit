@@ -117,10 +117,6 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
         return super.onMenuItemSelected(featureId, item);
     }
 
-    public void onStopClick(View v) {
-		mLoad.stop();
-	}
-	
 	private int getStreamByRadioButton() {
 		switch(mStreamGroup.getCheckedRadioButtonId()) {
 		case R.id.radio_voicecall:
@@ -148,8 +144,16 @@ public class AudioTestActivity extends Activity implements AudioManager.OnAudioF
                 .isBluetoothScoAvailableOffCall());
 		mLoad.start();
 	}
-	
-	public void onNormalClick(View v) {
+
+    public void onPauseClick(View v) {
+        mLoad.pause();
+    }
+
+    public void onStopClick(View v) {
+        mLoad.stop();
+    }
+
+    public void onNormalClick(View v) {
 		mManager.setMode(AudioManager.MODE_NORMAL);
 		mModeText.setText(R.string.mode_normal);
 		updateAudioState();

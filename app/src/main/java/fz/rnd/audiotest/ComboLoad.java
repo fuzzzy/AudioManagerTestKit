@@ -38,4 +38,11 @@ class ComboLoad extends IMediaLoad {
             mTrackRecordLoad.stop();
         }
     }
+
+    @Override
+    void pause() {
+        if (mTrackRecordLoad != null) {
+            mTrackRecordLoad.pause();
+        }
+    }
 }

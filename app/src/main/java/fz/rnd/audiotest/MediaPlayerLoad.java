@@ -81,4 +81,10 @@ class MediaPlayerLoad extends IMediaLoad
         }
     }
 
+    @Override
+    void pause() {
+        if(mPlayer != null) {
+            mPlayer.pause();
+        }
+    }
 }
